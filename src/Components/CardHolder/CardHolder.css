@@ -1,0 +1,33 @@
+.cardContainer {
+    margin: 20px;
+    margin-right: 0px;
+    background-color: whitesmoke;
+    width: 280px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    /* backgrounds-color: red; */
+}
+
+.icon {
+    width: 55px;
+    height: 25px;
+}
+
+.cardHolderTitle {
+    /* background-color: blue; */
+    flex-grow: 3;
+    font-size: 17px;
+    text-align: center;
+    color: black;
+    font-weight: 700;
+}
+
+.TitleOptions {
+    background-color: red;
+}
