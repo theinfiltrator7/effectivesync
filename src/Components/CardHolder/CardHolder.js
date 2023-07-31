@@ -1,27 +1,42 @@
 import React from 'react';
 import './CardHolder.css';
+import { Droppable } from 'react-beautiful-dnd';
 import Card from '../Card/Card';
 
-const CardHolder = () => {
+
+const CardHolder = (props) => {
     const [array, setArray] = React.useState([1,2,3,4,5,6,67,7,8]);
     // let array = [1,2,3,4,5,6,67,7,8];
-
     return (
         <div className='cardContainer'>
             <div className='headerContainer'>
                 <div className='cardHolderTitle'>
-                    Points for meeting
+                    {props.column.title}
                 </div>
                 <img className='icon' src={require('../../assets/options.png')}/>
-                {/* <div className='TitleOptions'>small</div> */}
             </div>
-            {array.map((item, index)=> {
-      return(  
-        <Card 
-            key={index} />)
-            }
 
-      )}
+            <Droppable droppableId={props.id}>
+                {(provided) => (
+                    <div className='holder' ref={provided.innerRef}
+                        {...provided.droppableProps}>
+                        {props.task.map((task, index)=> {
+                            return(  
+                                <Card 
+                                    key={task.id}
+                                    id={task.id}
+                                    index={index}
+                                    title={task.content} 
+                                />)
+                        })}
+                    {provided.placeholder}
+                    </div>
+                )}
+   
+            </Droppable>
+
+
+
         </div>
     )
 }

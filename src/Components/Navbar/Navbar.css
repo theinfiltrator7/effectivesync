@@ -1,0 +1,23 @@
+.navbarWrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    background-color: yellowgreen;
+    height: 60px;
+    align-items: center;
+    position: fixed;
+}
+
+.logo {
+    font-size: 30px;
+    color: red;
+    padding-left: 10px;
+}
+
+.filler {
+    flex-grow: 2;
+}
+
+.option {
+    padding: 15px;
+}
