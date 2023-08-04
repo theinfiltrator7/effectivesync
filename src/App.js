@@ -1,16 +1,14 @@
 import './App.css'
-import CardHolder from './Components/CardHolder/CardHolder';
-import Navbar from './Components/Navbar/Navbar';
+
 import Home from './Containers/Home/Home';
+import Members from './Containers/Members/Members';
 
 function App() {
   return (
     <div>
-      <Navbar/>
-
       <div className='app'>
 
- 
+        {/* <Members/> */}
         <Home/>
       </div>
     </div>

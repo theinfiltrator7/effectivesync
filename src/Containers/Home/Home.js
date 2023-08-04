@@ -1,11 +1,20 @@
 import React, {useState} from 'react';
 import './Home.css'
+import ReactModal from 'react-modal';
+
+import Navbar from '../../Components/Navbar/Navbar';
+import Sidebar from '../../Components/Sidebar/Sidebar';
 import initialData from '../../initial-data';
 import CardHolder from '../../Components/CardHolder/CardHolder';
 import { DragDropContext } from 'react-beautiful-dnd';
 
 const Home = () => {
+
     const [data, setData] = useState(initialData);
+    const [isCardOpen, setIsCardOpen] = useState(false);
+    const [clickedCard, setClickedCard] = useState(null);
+
+    let currentId = 'task-1';
 
     let onDragEnd = (result) => {
         const {destination, source, draggableId} = result;
@@ -63,19 +72,44 @@ const Home = () => {
             }}
 
             setData(newState);
-
     }
+
+    let closeModalHandler = () => {
+        setIsCardOpen(false);
+        setClickedCard(null);
+    }
+
+    let cardClickHandler = (cardId) => {
+        console.log("i am working", cardId)
+        setClickedCard(cardId)
+    }
+    
     return (
-        <DragDropContext
-            onDragEnd={onDragEnd}>
-            <div className='wrapper'>
-                {data.columnOrder.map(columnId => {
-                    const column =data.columns[columnId];
-                    const task =  column.taskIds.map(taskId => data.tasks[taskId]);
-                    return<CardHolder key={columnId} id={columnId} column={column} task={task}/>
-                })}
+        <div className='wrapper'>
+        <ReactModal 
+            isOpen={isCardOpen}  
+            onRequestClose={closeModalHandler}
+            style={{ overlay: {}, content: {top: '15vh', bottom: '15vh', left: '25vw', right: '25vw', minWidth: 600} }}>
+            <div>
+                <div></div>
             </div>
-        </DragDropContext>
+        </ReactModal>
+        <Navbar/>
+        <div className='content'>
+            {/* <DragDropContext
+                onDragEnd={onDragEnd}>
+                <div className='column'>
+                    {data.columnOrder.map(columnId => {
+                        const column =data.columns[columnId];
+                        const task =  column.taskIds.map(taskId => data.tasks[taskId]);
+                        return<CardHolder key={columnId} id={columnId} column={column} task={task} cardCLicked={() => cardClickHandler}/>
+                    })}
+                </div>
+            </DragDropContext> */}
+            {/* <Navbar/> */}
+                    <Sidebar/>
+        </div>
+        </div>
     )
 }
 

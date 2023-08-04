@@ -1,0 +1,29 @@
+.wrapper {
+    width: 250px;
+    height: 100vh;
+    background-color: lightblue;
+}
+
+.listWrapper{
+    padding-left: 10px;
+    padding-top: 30px;
+}
+
+.list {
+    padding: 5px;
+    padding-top: 15px;
+    font-size: 16px;
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+    padding-right: 20px;
+}
+
+.subList {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

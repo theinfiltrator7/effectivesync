@@ -1,4 +1,12 @@
 .wrapper {
     display: flex;
+    flex-direction: column;
+}
+
+.column {
+    display: flex;
     flex-direction: row;
+}
+.content {
+    width: auto;
 }

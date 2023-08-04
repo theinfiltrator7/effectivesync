@@ -8,14 +8,11 @@ const Navbar = () => {
                 Effectivesync
             </div>
             <div className='filler'/>
-            <div className='option' style={{paddingRight: 70}}>
-                Manage Sprint
-            </div>
             <div className='option'>
                 About Us
             </div>
             <div className='option'>
-                Settings
+                Sign Out
             </div>
         </div>
     )
