@@ -10,10 +10,11 @@ const Sidebar = () => {
                 <div className='list'>My Projects</div>
                 {myProjects.map(project => (
                     <div className='subList'>
-                        <img className='icon'  src={require('../../assets/plus.png')}/>
+                        <img className='sidebarIcon'  src={require('../../assets/plus.png')}/>
                         <div>{project.name}</div>
                     </div>
                 ))}
+                <div className='list'>My Tasks</div>
                 <div className='list'>Manage Sprints</div>
                 <div className='list'>Manage Members</div>
                 <div className='list'>Settings</div>

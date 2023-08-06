@@ -96,7 +96,8 @@ const Home = () => {
         </ReactModal>
         <Navbar/>
         <div className='content'>
-            {/* <DragDropContext
+            <Sidebar/>
+            <DragDropContext
                 onDragEnd={onDragEnd}>
                 <div className='column'>
                     {data.columnOrder.map(columnId => {
@@ -105,9 +106,8 @@ const Home = () => {
                         return<CardHolder key={columnId} id={columnId} column={column} task={task} cardCLicked={() => cardClickHandler}/>
                     })}
                 </div>
-            </DragDropContext> */}
+            </DragDropContext>
             {/* <Navbar/> */}
-                    <Sidebar/>
         </div>
         </div>
     )

@@ -25,8 +25,8 @@ function Card (props) {
                     {props.title}
                 </div>
                 <div className='utilityWrapper'>
-                    <img className="icon" src={require('../../assets/checklist.png')} />
-                    <img className="icon" src={require('../../assets/description.png')} alt="Logo" /> 
+                    <img className="cardIcon" src={require('../../assets/checklist.png')} />
+                    <img className="cardIcon" src={require('../../assets/description.png')} alt="Logo" /> 
                 </div>
                 <div className='progressWrapper'>
                     <div className='progressText'>Progress</div>

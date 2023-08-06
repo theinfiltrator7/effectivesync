@@ -6,7 +6,11 @@
 .column {
     display: flex;
     flex-direction: row;
+    /* background-color: red; */
+    flex-grow: 2;
 }
 .content {
-    width: auto;
+    display: flex;
+    
 }
+

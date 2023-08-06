@@ -1,3 +1,33 @@
-.content {
+.memberWrapper {
     padding-top: 60px;
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    background-color: violet;
+}
+
+.memberHeading {
+    font-size: 20px;
+    padding-top: 60px;
+    padding-bottom: 20px;
+}
+
+.contentWrapper {
+    margin-left: 250px;
+    padding: 30px;
+    width: 50%;
+}
+
+.detailsWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.details {
+    padding-top: 20px;
+    flex-grow: 2;
+}
+
+.detailItems {
+    padding: 10px;
 }

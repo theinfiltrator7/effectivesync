@@ -18,6 +18,18 @@
     flex-grow: 2;
 }
 
-.option {
+.optionWrapper {
+    display: flex;
+    align-items: center;
     padding: 15px;
+
+}
+
+.navIcon {
+    width: 18px;
+    height: 18px;
+    padding: 8px;
+}
+
+.option {
 }

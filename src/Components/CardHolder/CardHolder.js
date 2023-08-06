@@ -13,9 +13,8 @@ const CardHolder = (props) => {
                 <div className='cardHolderTitle'>
                     {props.column.title}
                 </div>
-                <img className='icon' src={require('../../assets/options.png')}/>
+                <img className='cardHolderIcon' src={require('../../assets/options.png')}/>
             </div>
-
             <Droppable droppableId={props.id}>
                 {(provided) => (
                     <div className='holder' ref={provided.innerRef}
@@ -34,9 +33,10 @@ const CardHolder = (props) => {
                 )}
    
             </Droppable>
-
-
-
+            <div className='addCardWrapper'>
+                <img className='addCardIcon' src={require('../../assets/plus.png')}/>
+                <div className='addCard'>Add New Card</div>
+            </div>
         </div>
     )
 }

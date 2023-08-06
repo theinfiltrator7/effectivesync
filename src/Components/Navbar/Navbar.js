@@ -8,12 +8,18 @@ const Navbar = () => {
                 Effectivesync
             </div>
             <div className='filler'/>
-            <div className='option'>
-                About Us
+            <div className='optionWrapper'>
+                <img className='navIcon' src={require('../../assets/info.png')}/>
+                <div className='option'>
+                    About Us
+                </div>
             </div>
-            <div className='option'>
-                Sign Out
-            </div>
+            <div className='optionWrapper'>
+                <img className='navIcon' src={require('../../assets/logout.png')}/>              
+                <div className='option'>
+                    Sign Out
+                </div>
+                </div>
         </div>
     )
 }

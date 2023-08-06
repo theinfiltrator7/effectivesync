@@ -1,11 +1,15 @@
 .wrapper {
+    position: fixed;
     width: 250px;
+    min-width: 250px;
+    max-width: 250px;
     height: 100vh;
     background-color: lightblue;
+    overflow: hidden;
 }
 
 .listWrapper{
-    padding-left: 10px;
+    padding-left: 20px;
     padding-top: 30px;
 }
 
@@ -15,13 +19,15 @@
     font-size: 16px;
 }
 
-.icon {
-    width: 22px;
-    height: 22px;
-    padding-right: 20px;
+.sidebarIcon {
+    width: 12px;
+    height: 12px;
+    padding-right: 10px;
+    /* background-color: red; */
 }
 
 .subList {
+    font-size: 15px;
     margin: 10px;
     display: flex;
     flex-direction: row;

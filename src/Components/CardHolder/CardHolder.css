@@ -1,12 +1,9 @@
 .cardContainer {
     margin: 20px;
     margin-right: 0px;
-    background-color: whitesmoke;
     width: 290px;
-    
     border-radius: 15px;
-    height: 90vh;
-    margin-top: 60px;
+    height: 89vh;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -15,19 +12,23 @@
     display: flex;
     flex-direction: row;
     padding: 10px;
-    /* position: fixed; */
-    background-color: red;
-    width: 100%;
-    /* backgrounds-color: red; */
+    position: fixed;
+    background-color: lightgreen;
+    width: 270px;
+    height: 30px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
 }
 
 .holder {
-    min-height: 200px;
+    padding-top: 45px;
 }
 
-.icon {
-    width: 55px;
+.cardHolderIcon {
+    width: 25px;
     height: 25px;
+    padding-right: 20px;
 }
 
 .cardHolderTitle {
@@ -41,4 +42,27 @@
 
 .TitleOptions {
     background-color: red;
+}
+
+.addCardWrapper {
+    display: flex;
+    height: 40px;
+    margin: 20px;
+    align-items: center;
+    background-color: lightcyan;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.addCard {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.addCardIcon {
+    height: 12px;
+    width: 12px;
+    padding-right: 15px;
+    padding-left: 15px;
+
 }
