@@ -8,8 +8,8 @@ const Sidebar = () => {
         <div className='wrapper'>
             <div className='listWrapper'>
                 <div className='list'>My Projects</div>
-                {myProjects.map(project => (
-                    <div className='subList'>
+                {myProjects.map((project, i) => (
+                    <div className='subList' key={i}>
                         <img className='sidebarIcon'  src={require('../../assets/plus.png')}/>
                         <div>{project.name}</div>
                     </div>

@@ -12,7 +12,7 @@
     display: flex;
     flex-direction: row;
     padding: 10px;
-    position: fixed;
+    position: relative;
     background-color: lightgreen;
     width: 270px;
     height: 30px;
