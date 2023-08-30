@@ -1,34 +1,34 @@
 .navbarWrapper {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    background-color: yellowgreen;
-    height: 60px;
-    align-items: center;
-    position: fixed;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  background-color: #00599b;
+  height: 60px;
+  align-items: center;
+  position: fixed;
+  font-family: "Ubuntu"
 }
 
 .logo {
-    font-size: 30px;
-    color: red;
-    padding-left: 10px;
+  font-size: 30px;
+  color: #030f4b;
+  padding-left: 10px;
 }
 
 .filler {
-    flex-grow: 2;
+  flex-grow: 2;
 }
 
 .optionWrapper {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-
+  display: flex;
+  align-items: center;
+  padding: 15px;
 }
 
 .navIcon {
-    width: 18px;
-    height: 18px;
-    padding: 8px;
+  width: 18px;
+  height: 18px;
+  padding: 8px;
 }
 
 .option {
