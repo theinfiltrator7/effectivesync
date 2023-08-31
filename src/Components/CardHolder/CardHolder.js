@@ -4,41 +4,43 @@ import { Droppable } from "react-beautiful-dnd";
 import Card from "../Card/Card";
 
 const CardHolder = (props) => {
-  const [array, setArray] = React.useState([1, 2, 3, 4, 5, 6, 67, 7, 8]);
-  // let array = [1,2,3,4,5,6,67,7,8];
+
   return (
     <div className="cardContainer">
       <div className="headerContainer">
-        <div className="cardHolderTitle">{props.column.title}</div>
+        <div className="cardHolderTitle">{props.title}</div>
         <img
           className="cardHolderIcon"
           src={require("../../assets/options.png")}
         />
       </div>
-      <Droppable droppableId={props.id}>
-        {(provided) => (
-          <div
-            className="holder"
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {props.task.map((task, index) => {
-              return (
-                <Card
-                  key={task.id}
-                  id={task.id}
-                  index={index}
-                  title={task.content}
-                  data={task}
-                  cardClicked = {() => props.cardClicked()}
-                />
-              );
-            })}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-      <div className="addCardWrapper">
+      {props.data? 
+            <Droppable droppableId={props.id}>
+            {(provided) => (
+              <div
+                className="holder"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                
+                {props.data.map((card, index) => {
+                  console.log("card data",card)
+                  return (
+                    <Card
+                      key={card._id}
+                      id={card._id}
+                      title={card.title}
+                      data={card}
+                      cardClicked = {() => props.cardClicked()}
+                    />
+                  );
+                })}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>: null}
+
+      <div className="addCardWrapper" onClick={() => props.onNewCardHandler(props.data._id)}>
         <img className="addCardIcon" src={require("../../assets/plus.png")} />
         <div className="addCard">Add New Card</div>
       </div>

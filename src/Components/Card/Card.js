@@ -53,8 +53,29 @@ function Card (props) {
         return "grey";
     }
   };
+
+  const dateObj = new Date(props.data.dueDate);
+  let getSuffix = (num) => {
+    const i = num % 10,
+          j = num % 100;
+    if (i == 1 && j != 11) {
+        return num + "st";
+    }
+    if (i == 2 && j != 12) {
+        return num + "nd";
+    }
+    if (i == 3 && j != 13) {
+        return num + "rd";
+    }
+    return num + "th";
+}
+
+  const dateWithSuffix = getSuffix(dateObj.getDate());
+
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthValueName = monthNames[dateObj.getMonth()];
   return (
-    <Draggable draggableId={props.id} index={props.index}>
+    <Draggable draggableId={props.data._id} index={props.index}>
       {(provided) => (
         <div
           className="card"
@@ -73,7 +94,7 @@ function Card (props) {
               {props.data.priority}
             </div>
             <div className="spaceContainer" />
-            <div className="dueDate">Due on July 9th</div>
+            <div className="dueDate">{`Due on ${monthValueName} ${dateWithSuffix}`}</div>
           </div>
           <div className="description">{props.data.content}</div>
           <div className="utilityWrapper">

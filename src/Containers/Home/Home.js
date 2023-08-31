@@ -46,24 +46,29 @@ const Home = () => {
   const listData = [{ name: "Create a react app", listName: "To Do" }];
 
   const [data, setData] = useState(initialData);
-  const [isCardOpen, setIsCardOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [clickedCard, setClickedCard] = useState(null);
-  const [checkList, setCheckList] = useState(checklistData);
-  const [priority, setPriority] = useState(2);
-  const [value, setValue] = useState(null);
+
 
   const [userBoards, setUserBoards] = useState(null);
   const [newBoardName, setNewBoardName] = useState("");
   const [addingBoard, setAddingBoard] = useState(false);
   const [selectedBoard, setSelectedBoard] = useState(null);
+  const [selectedCardListId, setSelectedCardListId] = useState(null)
   const [newListTitle, setNewListTitle] = useState("");
+
+  const [boardLists, setBoardLists] = useState();
+  const [boardCards, setBoardCards] = useState();
+
+  const [listUpdated, setListUpdated] = useState(false)
+
 
   
 
   useEffect(() => {
     if(!selectedBoard) return;
     getBoardData();
-  },[selectedBoard]);
+  },[selectedBoard, listUpdated]);
 
   useEffect(() => {
     getAllBoards();
@@ -72,15 +77,11 @@ const Home = () => {
   let createList = () => {
     console.log(selectedBoard)
     axios.post('/list/',  {
-        "title": "Sample fftitle",
+        "title": newListTitle,
         "board": selectedBoard
     })
     .then(function (res) {
-        console.log('i am creating list', res)
-    //   let boardData = [];
-    //   boardData = boardData.concat(res.data.user.adminBoard)
-    //   boardData = boardData.concat(res.data.user.userBoard)
-    //   setUserBoards(boardData);
+      setListUpdated(true)
     })
     .catch(function (error) {
       console.log(error);
@@ -89,9 +90,30 @@ const Home = () => {
 
   let getBoardData = () => {
     axios.get(`/board/${selectedBoard}`)
-    .then(function (res) {
+    .then(
 
-    })
+      function (res) {
+        let obj = {};
+        let cards = res.data.cards;
+        let lists = res.data.lists;
+        if (lists) {
+          setBoardLists(lists)
+          cards.forEach((card) => {
+            if (obj [card.list]) {
+            obj [card.list].push(card);
+            } else {
+            obj [card.list] = [card];
+            }
+          } ) 
+          lists.map((list) => {
+            list.cards = obj [list._id]})
+            setBoardCards(obj)
+            setListUpdated(false)
+            setNewListTitle('')
+            console.log('this is the board cards', boardCards)
+        }
+    }
+    )
     .catch(function (error) {
       console.log(error);
     });
@@ -122,6 +144,7 @@ const Home = () => {
     });
   }
 
+
   let boardNameHandler = (e) => {
     let boardName = e.target.value;
     setNewBoardName(boardName);
@@ -130,6 +153,16 @@ const Home = () => {
   let addBoardHandler = () => {
     setAddingBoard(true);
   };
+
+  let onAddingNewCardHandler = (id) => {
+    console.log(id)
+    setIsModalOpen(true);
+    setSelectedCardListId(id)
+  }
+
+  let onListNameChangeHandler = (e) => {
+    setNewListTitle(e.target.value)
+  }
 
   let onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
@@ -194,75 +227,87 @@ const Home = () => {
   };
 
   let closeModalHandler = () => {
-    setIsCardOpen(false);
+    setIsModalOpen(false);
     setClickedCard(null);
   };
 
   let cardClickHandler = (cardId) => {
-    console.log("i am working", cardId);
     setClickedCard(cardId);
-    setIsCardOpen(true);
-    console.log(isCardOpen)
+    setIsModalOpen(true);
   };
 
-  let onItemHoursChangeHandler = (e, index) => {
-    let newCheckList = [...checkList];
-    let newItem = { ...newCheckList[index], hours: e.target.value };
-    newCheckList.splice(index, 1, newItem);
-    setCheckList(newCheckList);
-  };
+  // let onItemHoursChangeHandler = (e, index) => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = { ...newCheckList[index], hours: e.target.value };
+  //   newCheckList.splice(index, 1, newItem);
+  //   setCheckList(newCheckList);
+  // };
 
-  let onItemDescriptionChangeHandler = (e, index) => {
-    let newCheckList = [...checkList];
-    let newItem = { ...newCheckList[index], description: e.target.value };
-    newCheckList.splice(index, 1, newItem);
-    setCheckList(newCheckList);
-  };
+  // let onItemDescriptionChangeHandler = (e, index) => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = { ...newCheckList[index], description: e.target.value };
+  //   newCheckList.splice(index, 1, newItem);
+  //   setCheckList(newCheckList);
+  // };
 
-  let onAddItemHandler = (index) => {
-    let newCheckList = [...checkList];
-    let newItem = { ...newCheckList[index], isEditing: false };
-    newCheckList.splice(index, 1, newItem);
-    setCheckList(newCheckList);
-  };
+  // let onAddItemHandler = (index) => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = { ...newCheckList[index], isEditing: false };
+  //   newCheckList.splice(index, 1, newItem);
+  //   setCheckList(newCheckList);
+  // };
 
-  let onAddNewItemHandler = () => {
-    let newCheckList = [...checkList];
-    let newItem = {
-      checklistId: "check-7",
-      isDone: false,
-      description: "",
-      hours: 0,
-      isEditing: true,
-    };
-    newCheckList.push(newItem);
-    setCheckList(newCheckList);
-  };
+    let onCardModalSubmitHandler = (data) => {
+      console.log("selected board", selectedBoard)
+      axios.post('/card', {
+        ...data,
+        list: selectedCardListId,
+        board: selectedBoard
+      })
+      .then(function (response) {
+        setAddingBoard(false)
+        setIsModalOpen(false)
+      })
+      .catch(function (error) {
 
-  let onItemDoneHandler = (index) => {
-    let newCheckList = [...checkList];
-    let newItem = {
-      ...newCheckList[index],
-      isDone: !newCheckList[index].isDone,
-    };
-    newCheckList.splice(index, 1, newItem);
-    setCheckList(newCheckList);
-  };
+        console.log(error);
+      });
+    }
 
-  let onEditListItem = (index) => {
-    let newCheckList = [...checkList];
-    let newItem = { ...newCheckList[index], isEditing: true };
-    newCheckList.splice(index, 1, newItem);
-    setCheckList(newCheckList);
-  };
+  // let onAddNewItemHandler = () => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = {
+  //     checklistId: "check-7",
+  //     isDone: false,
+  //     description: "",
+  //     hours: 0,
+  //     isEditing: true,
+  //   };
+  //   newCheckList.push(newItem);
+  //   setCheckList(newCheckList);
+  // };
 
-  let onPriorityChange = (e) => {
-    setPriority(e.target.value);
-    console.log(value);
-  };
+  // let onItemDoneHandler = (index) => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = {
+  //     ...newCheckList[index],
+  //     isDone: !newCheckList[index].isDone,
+  //   };
+  //   newCheckList.splice(index, 1, newItem);
+  //   setCheckList(newCheckList);
+  // };
+
+  // let onEditListItem = (index) => {
+  //   let newCheckList = [...checkList];
+  //   let newItem = { ...newCheckList[index], isEditing: true };
+  //   newCheckList.splice(index, 1, newItem);
+  //   setCheckList(newCheckList);
+  // };
+
 
   let onBoardSelect = (id) => {
     console.log(id)
+    setBoardLists(null)
     setSelectedBoard(id)
   }
 
@@ -274,11 +319,9 @@ const Home = () => {
   return (
     <div className="wrapper">
         <CardModal
-            cardOpen={isCardOpen}
-            priority = {priority}
-            closeModalHandler = {closeModalHandler}
-            onPriorityChange = {onPriorityChange}
-            onAddNewItemHandler = {onAddNewItemHandler}
+            modalClose = {closeModalHandler}
+            cardOpen={isModalOpen}
+            onSubmit = {onCardModalSubmitHandler}
             />
       <Navbar />
       <div className="content">
@@ -297,24 +340,27 @@ const Home = () => {
         <div className="homeSubContent">
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="column">
-              {data.columnOrder.map((columnId) => {
-                const column = data.columns[columnId];
-                const task = column.taskIds.map((taskId) => data.tasks[taskId]);
+              {boardLists?
+               boardLists.map((list) => {
+                console.log("i ma listttt", boardLists)
                 return (
                   <CardHolder
-                    key={columnId}
-                    id={columnId}
-                    column={column}
-                    task={task}
+                    key={list._id}
+                    id= {list._id}
+                    title = {list.title}
+                    data = {list.cards}
                     cardClicked={() => cardClickHandler()}
+                    onNewCardHandler = {onAddingNewCardHandler}
                   />
                 );
-              })}
+              }
+              )
+              : null}
             </div>
           </DragDropContext>
         <div className="newListWrapperHome">
           <div>Add new List</div>
-          <input type="text" style={{width: 220, fontFamily: 'Ubuntu', marginTop: 10}}/>
+          <input onChange={(e) => onListNameChangeHandler(e)} value={newListTitle} type="text" style={{width: 220, fontFamily: 'Ubuntu', marginTop: 10}}/>
           <Button style={{margin: 10,  backgroundColor: '#e0ffff', fontFamily: 'Ubuntu'}} onClick={createList}>Submit</Button>
         </div>
         </div>
@@ -322,7 +368,7 @@ const Home = () => {
             : 
             <div className="addListHomeWrapper">
                 <div className="addListHome">Add a list to the board to start</div>
-                <input type="text" style={{marginLeft: 32, paddingRight: 20, fontFamily: 'Ubuntu', height: 25, width: 200}} />
+                <input type="text" onChange={(e) => onListNameChangeHandler(e)} value={newListTitle} style={{marginLeft: 32, paddingRight: 20, fontFamily: 'Ubuntu', height: 25, width: 200}} />
                 <Button style={{margin: 10,  backgroundColor: '#e0ffff', fontFamily: 'Ubuntu'}} onClick={createList}>Add list</Button>
             </div>
             }

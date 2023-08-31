@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {lazy, useState} from 'react';
 import ReactModal from "react-modal";
 import './CardModal.css'
 
@@ -14,25 +14,61 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Button } from 'antd';
+import { green } from '@mui/material/colors';
 
 const CardModal = (props) => {
 
-    let getInitials = (name) => {
+  
+  let initialData = {
+    title: "Enter title",
+    priority: "MEDIUM",
+    description: "Add a more detailed description",
+    dueDate: "",
+    completed: false,
+    list: "",
+    assignedTo: "", 
+    rank: "",
+    isDeleted: false  
+  }
+  
+  const [cardData, setCardData] = useState(initialData);
+
+  
+  let onPriorityChangeHandler = (e) => {
+    setCardData({...cardData, priority: e.target.value})
+    console.log(cardData);
+  };
+
+  let onChangeHandler = (e) => {
+    setCardData({
+      ...cardData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  let onDueDateChangeHandler = (value) => {
+    setCardData({
+      ...cardData,
+      dueDate: value
+    })
+  }
+
+  let getInitials = (name) => {
         const parts = name.split(' ');
         let initials = '';
     
         for (let i = 0; i < parts.length; i++) {
             initials += parts[i][0];
         }
-    
         return initials;
     }
+
 
     return (
         <ReactModal
         ariaHideApp={false}
         isOpen={props.cardOpen}
-        onRequestClose={props.closeModalHandler}
+        onRequestClose={props.modalClose}
         style={{
           overlay: {zIndex: 2},
           content: {
@@ -49,7 +85,12 @@ const CardModal = (props) => {
         <div className='cardModalWrapper'>
           <div className="modalHeaderWrapper">
             <div>
-              <div className="modalHeading" style={{marginBottom: 0}}>Task Name</div>
+              <input 
+                name="title"
+                value={cardData.title}
+                onChange={(e) => onChangeHandler(e)}
+                className="modalHeading" 
+                style={{marginBottom: 0, fontFamily: "Ubuntu", fontSize: 15, padding: 10, width: 320}}/>
               <div className="modalSubHeading">in List</div>
             </div>
             <div className="modalHeaderFiller" />
@@ -60,9 +101,9 @@ const CardModal = (props) => {
                 style={{fontFamily: "Ubuntu"}}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={props.priority}
+                  value={cardData.priority}
                   label="Priority"
-                  onChange={props.onPriorityChange}
+                  onChange={(e) => onPriorityChangeHandler(e)}
                 >
                   <MenuItem style={{fontFamily: "Ubuntu"}} value={"HIGH"}>HIGH</MenuItem>
                   <MenuItem style={{fontFamily: "Ubuntu"}} value={"MEDIUM"}>MEDIUM</MenuItem>
@@ -73,19 +114,24 @@ const CardModal = (props) => {
           </div>
           <div className="modalHeading" >Description</div>
           <textarea
+            name="description"
+            onChange={(e) => onChangeHandler(e)}
             className="descriptionInputText"
-            defaultValue="Add a more detailed description"
+            value={cardData.description}
           />
           <div className="dueDateWrapper">
             <div className="modalHeading">Due Date</div>
+            <div style={{width: 210, paddingBottom: 20}}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                {/* <DatePicker
-                  value={value}
-                  onChange={(newValue) => setValue(newValue)}
-                /> */}
+              <DemoContainer 
+              components={["DatePicker"]}>
+                <DatePicker
+                  value={cardData.dueDate}
+                  onChange={(newValue) => onDueDateChangeHandler(newValue)}
+                />
               </DemoContainer>
             </LocalizationProvider>
+            </div>
           </div>
           <div className="modalHeading">Members</div>
           <div style={{ paddingBottom: 10 }}>@abedabraham98, @manukoshy</div>
@@ -159,6 +205,10 @@ const CardModal = (props) => {
               </div>
             </div>
           </div>
+          <Button 
+            onClick={() => props.onSubmit(cardData)}
+            style={{marginTop: 30, backgroundColor: 'green' }}
+            size= 'large'>Submit</Button>
         </div>
       </ReactModal> 
     )

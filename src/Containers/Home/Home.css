@@ -8,7 +8,7 @@
   margin-left: 240px;
   display: flex;
   flex-direction: row;
-  flex-grow: 2;
+  /* flex-grow: 2; */
 }
 .content {
   display: flex;
