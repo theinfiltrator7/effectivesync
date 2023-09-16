@@ -1,11 +1,11 @@
 .cardModalWrapper {
     padding: 20px;
+    font-family: "Ubuntu";
 }
 
 .modalHeaderWrapper {
     display: flex;
     padding-bottom: 20px;
-    font-family: "Ubuntu";
   }
   
   .modalHeaderFiller {

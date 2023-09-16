@@ -12,48 +12,60 @@ const myProjects = [
 ];
 
 const Sidebar = (props) => {
-
   return (
     <div className="sidebarWrapper">
       <div className="listWrapper">
-        <div className="list">My Boards</div>
+        <div className="list">
+          <Link to="/">My Boards</Link>
+        </div>
         {props.userBoards
           ? props.userBoards.map((board, i) => {
-            return(
-                <div onClick = {() => props.onBoardSelect(board._id)} className="sidebarSubListWrapper" key={i}>
+              return (
+                <div
+                  onClick={() => props.onBoardSelect(board._id)}
+                  className="sidebarSubListWrapper"
+                  key={i}
+                >
                   <img
                     className="sidebarIcon"
+                    alt="plus sign"
                     src={require("../../assets/plus.png")}
                   />
-                  <div className="sidebarSubList">
-                   {board.title}
-                  </div>
+                  <div className="sidebarSubList">{board.title}</div>
                 </div>
-              )
-          }
-            )
+              );
+            })
           : null}
-        {props.addingBoard ? ( 
-            <div >
-              <div style={{paddingBottom: 5}}>Enter Board Name</div>
-            <input type="text" style={{height: 26, fontFamily: "Ubuntu"}} onChange={(e) => props.boardNameHandler(e)} />
-            <Button style={{fontFamily: "Ubuntu", marginTop: 5}} onClick={props.onSubmit}>Submit</Button>
-            <Button style={{fontFamily: "Ubuntu", marginTop: 5, marginLeft: 5}} onClick={() => props.setAddingBoard(false)}>Cancel</Button>
+        {props.addingBoard ? (
+          <div>
+            <div style={{ paddingBottom: 5 }}>Enter Board Name</div>
+            <input
+              type="text"
+              style={{ height: 26, fontFamily: "Ubuntu" }}
+              onChange={(e) => props.boardNameHandler(e)}
+            />
+            <Button
+              style={{ fontFamily: "Ubuntu", marginTop: 5 }}
+              onClick={props.onSubmit}
+            >
+              Submit
+            </Button>
+            <Button
+              style={{ fontFamily: "Ubuntu", marginTop: 5, marginLeft: 5 }}
+              onClick={() => props.setAddingBoard(false)}
+            >
+              Cancel
+            </Button>
           </div>
         ) : (
-          <Button style={{fontFamily: "Ubuntu"}} className="sidebarSubList" onClick={props.addBoardHandler}>
+          <Button
+            style={{ fontFamily: "Ubuntu" }}
+            className="sidebarSubList"
+            onClick={props.addBoardHandler}
+          >
             Add Board+
           </Button>
-          
         )}
-
-        <div className="list">
-          <Link to="/tasks">My Tasks</Link>
-        </div>
-        <div className="list">
-          <Link to="/members ">Manage Members</Link>
-        </div>
-        <div className="list">Settings</div>
       </div>
     </div>
   );

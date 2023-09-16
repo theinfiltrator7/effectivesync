@@ -5,8 +5,10 @@
   background-color: #00599b;
   height: 60px;
   align-items: center;
+  z-index: 2;
   position: fixed;
-  font-family: "Ubuntu"
+  font-family: "Ubuntu",
+
 }
 
 .logo {

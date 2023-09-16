@@ -46,7 +46,6 @@ class LoginContainer extends React.Component {
     let data = {
       email: this.state.email,
       password: this.state.password,
-      webForm: true,
     };
     if (this.state.screen === "SIGNUP") {
       url = "/user/signup";
@@ -60,18 +59,13 @@ class LoginContainer extends React.Component {
     axios
       .post(url, data)
       .then((resp) => {
-        console.log("something");
         Cookies.set("token", resp.data.token);
-        let AUTH_TOKEN = `Bearer ${Cookies.get('token')}`
-        axios.defaults.headers.common['authorization'] = AUTH_TOKEN;
+        let AUTH_TOKEN = `Bearer ${Cookies.get("token")}`;
+        axios.defaults.headers.common["authorization"] = AUTH_TOKEN;
         Cookies.set(
           "email",
           resp.data.email ? resp.data.email : resp.data.user?.email,
         );
-        console.log(resp.data.app);
-        // if(resp.data.app){
-        //   router.params.history.push(`workspace/${resp.data.app}`)
-        // }
         this.setState({
           loggedIn: true,
           networkCallState: "resolved",
@@ -88,37 +82,9 @@ class LoginContainer extends React.Component {
       });
   };
 
-  generatePasswordToken = () => {
-    if (!this.state.email) {
-      this.setState({
-        message: "enter your email",
-      });
-      return;
-    }
-    this.setState({
-      networkCallState: "pending",
-    });
-    axios
-      .post("/user/recover", {
-        email: this.state.email,
-      })
-      .then((resp) => {
-        this.setState({
-          successMessage: "Email has been sent",
-          networkCallState: "resolved",
-        });
-      })
-      .catch((err) => {
-        this.setState({
-          message: err.message,
-          networkCallState: "rejected",
-        });
-      });
-  };
 
   render() {
     if (this.state.loggedIn) {
-      console.log("i am cworking");
       return <Navigate to="/" />;
     }
     return (
@@ -146,7 +112,6 @@ function withRouter(Component) {
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    console.log("these are mt props", props);
     return <Component {...props} router={{ location, navigate, params }} />;
   }
 

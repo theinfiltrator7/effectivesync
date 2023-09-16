@@ -1,10 +1,12 @@
 import React from "react";
 import "./Card.css";
+import dayjs from "dayjs";
 
 import { Draggable } from "react-beautiful-dnd";
 import { Button } from "antd";
+import initialData from "../../initial-data";
 
-function Card (props) {
+function Card(props) {
   const checklistData = [
     {
       checklistId: "check-1",
@@ -36,11 +38,18 @@ function Card (props) {
     },
   ];
 
-  const totalHours = checklistData.reduce((sum, item) => sum + item.hours, 0);
-  const hoursDone = checklistData
-    .filter((item) => item.isDone)
-    .reduce((sum, item) => sum + item.hours, 0);
-  const progressPercent = (hoursDone / totalHours) * 100;
+  const getPercent = (checkList) => {
+
+  }
+
+  const totalHours = props.card.checkList.reduce((sum, item) => sum + item.hoursRequired, 0);
+  const hoursDone = props.card.checkList
+    .filter((item) => item.isCompleted)
+    .reduce((sum, item) => sum + item.hoursRequired, 0);
+
+  let progressPercent = totalHours === 0 ? 0 : (hoursDone / totalHours) * 100;
+
+
   const getColor = (priority) => {
     switch (priority) {
       case "HIGH":
@@ -54,28 +63,41 @@ function Card (props) {
     }
   };
 
-  const dateObj = new Date(props.data.dueDate);
+  const dateObj = new Date(props.card.dueDate);
   let getSuffix = (num) => {
     const i = num % 10,
-          j = num % 100;
-    if (i == 1 && j != 11) {
-        return num + "st";
+      j = num % 100;
+    if (i === 1 && j !== 11) {
+      return num + "st";
     }
-    if (i == 2 && j != 12) {
-        return num + "nd";
+    if (i === 2 && j !== 12) {
+      return num + "nd";
     }
-    if (i == 3 && j != 13) {
-        return num + "rd";
+    if (i === 3 && j !== 13) {
+      return num + "rd";
     }
     return num + "th";
-}
+  };
 
   const dateWithSuffix = getSuffix(dateObj.getDate());
 
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const monthValueName = monthNames[dateObj.getMonth()];
   return (
-    <Draggable draggableId={props.data._id} index={props.index}>
+    <Draggable key={props.card._id} draggableId={props.card._id} index={props.index}>
       {(provided) => (
         <div
           className="card"
@@ -83,55 +105,82 @@ function Card (props) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          {/* {props.data.image ? (
-            <img className="displayImage" src={props.data.image} alt="img" />
+          {/* {props.card.image ? (
+            <img className="displayImage" src={props.card.image} alt="img" />
           ) : null} */}
+          <div className="headerWrapper" style={{ paddingLeft: "10px" }}>
+            {props.card.title}
+          </div>
           <div className="headerWrapper">
             <div
               className="priority"
-              style={{ backgroundColor: getColor(props.data.priority) }}
+              style={{ backgroundColor: getColor(props.card.priority) }}
             >
-              {props.data.priority}
+              {props.card.priority}
             </div>
             <div className="spaceContainer" />
             <div className="dueDate">{`Due on ${monthValueName} ${dateWithSuffix}`}</div>
           </div>
-          <div className="description">{props.data.content}</div>
+          <div className="description">{props.card.content}</div>
           <div className="utilityWrapper">
-            <img
-              className="cardIcon"
-              src={require("../../assets/checklist.png")}
-            />
-            <img
-              className="cardIcon"
-              src={require("../../assets/description.png")}
-              alt="Logo"
-            />
+            {!!props.card.checkList?.length && (
+              <div>
+                <img
+                  className="cardIcon"
+                  src={require("../../assets/checklist.png")}
+                  alt="checklist icon"
+                />
+              </div>
+            )}
+            <div onClick={() => props.cardClicked(props.card)}>
+              <img
+                className="cardIcon"
+                src={require("../../assets/description.png")}
+                alt="description icon"
+              />
+            </div>
           </div>
           <div className="progressWrapper">
-            <div className="progressText">Progress</div>
+            <div className="progressText"> Progress </div>
             <div className="spaceContainer" />
             <div className="dueDate">{totalHours}hrs+</div>
           </div>
           <div className="progessbar">
+            {console.log("====", progressPercent)}
             <div
               className="progress"
-              style={{ width: `${progressPercent}%` }}
+              style={{ width:progressPercent == NaN? 0 : `${progressPercent}%` }}
             ></div>
           </div>
           <div className="footerWrapper">
-            <img
-              className="footerIcon"
-              src={require("../../assets/comments.png")}
-            />
-            <div className="count">8</div>
-            <img
-              className="footerIcon"
-              src={require("../../assets/attachment.png")}
-            />
-            <div className="count">2</div>
+ 
             <div className="spaceContainer" />
-            <Button style={{marginRight: 10, marginBottom: 10,  backgroundColor: '#e0ffff', fontFamily: 'Ubuntu', zIndex: 0}} size="small" onClick={() => props.cardClicked('sfs3jrsdjhfowieuh454o3i')}>EDIT CARD</Button>
+            <Button
+              style={{
+                marginRight: 10,
+                marginBottom: 10,
+                backgroundColor: "#e0ffff",
+                fontFamily: "Ubuntu",
+                zIndex: 0,
+              }}
+              size="small"
+              onClick={() => props.cardClicked(props.card)}
+            >
+              EDIT CARD
+            </Button>
+            <Button
+              style={{
+                marginRight: 10,
+                marginBottom: 10,
+                backgroundColor: "#e0ffff",
+                fontFamily: "Ubuntu",
+                zIndex: 0,
+              }}
+              size="small"
+              onClick={() => props.deleteCard(props.card._id, props.card.list)}
+            >
+              DELETE
+            </Button>
           </div>
         </div>
       )}
