@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Home.css";
 import axios from "axios";
+import ReactModal from "react-modal";
 
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Sidebar/Sidebar";
@@ -33,6 +34,10 @@ const Home = () => {
   const [boardMember, setBoardMember] = useState([]);
 
   const [resumeFile, setResumeFile] = useState(null);
+
+  const [selectedMemberIndex, setSelectedMemberIndex] = useState(null);
+  const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
+
 
   useEffect(() => {
     if (!selectedBoard) return;
@@ -356,6 +361,25 @@ const Home = () => {
 
   return (
     <div className="wrapper">
+      {/* {showSkillsModal && (
+        <ReactModal
+          isOpen={showSkillsModal}
+          style={{
+            overlay: { zIndex: 2 },
+            content: {
+              top: "15vh",
+              bottom: "15vh",
+              left: "20vw",
+              right: "20vw",
+              minWidth: 600,
+              borderRadius: 15,
+              backgroundColor: "#fff9df",
+            },
+          }}>
+          <div></div>
+        </ReactModal>
+      )} */}
+
       {isModalOpen && (
         <CardModal
           modalClose={closeModalHandler}
@@ -450,6 +474,28 @@ const Home = () => {
                             >
                               Remove Admin
                             </Button>
+                            {member.skills?
+                              <Button 
+                              style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
+                              onClick={() => setSelectedAdminIndex(i)}>
+                                Show Skills</Button>:null}
+                                {selectedAdminIndex === i?
+                                  <div>
+                                    <div style={{padding: 10}}>Skills</div>
+                                    {member.skills.map((skill) => {
+                                      return (
+                                        <div style={{display: "flex"}}>
+                                          <div style={{paddingLeft: 15, paddingBottom: 9}}>+</div>
+                                          <div style={{paddingLeft: 10}}>{skill}</div>
+                                        </div>
+                                      )
+                                    })}
+                                    <Button
+                                      style={{ fontFamily: "Ubuntu", margin: 10 }}
+                                      onClick={() => setSelectedAdminIndex(null)}
+                                    >Hide Skills</Button>
+                                  </div>
+                                  : null}
                             <div className="memberDetailItems">
                               Upload Resume to Parse and update skills and
                               experience
@@ -474,6 +520,7 @@ const Home = () => {
                     })}
                     <div style={{ paddingBottom: 10 }}>BOARD MEMBERS</div>
                     {boardMember.map((member, i) => {
+                      console.log("member", member)
                       return (
                         <div className="memberDetailsWrapper" key={member._id}>
                           <div className="memberDetails">
@@ -486,6 +533,28 @@ const Home = () => {
                             >
                               Remove Member
                             </Button>
+                            {member.skills?
+                              <Button 
+                              style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
+                              onClick={() => setSelectedMemberIndex(i)}>
+                                Show Skills</Button>:null}
+                                {selectedMemberIndex === i?
+                                  <div>
+                                    <div style={{padding: 10}}>Skills</div>
+                                    {member.skills.map((skill) => {
+                                      return (
+                                        <div style={{display: "flex"}}>
+                                          <div style={{paddingLeft: 15, paddingBottom: 9}}>+</div>
+                                          <div style={{paddingLeft: 10}}>{skill}</div>
+                                        </div>
+                                      )
+                                    })}
+                                    <Button
+                                      style={{ fontFamily: "Ubuntu", margin: 10 }}
+                                      onClick={() => setSelectedMemberIndex(null)}
+                                    >Hide Skills</Button>
+                                  </div>
+                                  : null}
                             <div className="memberDetailItems">
                               Upload Resume to Parse and update skills and
                               experience
