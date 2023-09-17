@@ -31,7 +31,6 @@ const CardModal = (props) => {
     ...props.cardInitialData,
   });
 
-  console.log("card +++", cardData)
 
   const [email, setEmail] = useState("");
 
@@ -96,7 +95,6 @@ const CardModal = (props) => {
   };
 
   let getRecommendationHandler = () => {
-    console.log(" ++++ get recommendation handler ", cardData)
     let memberData = props.boardAdmin
       .concat(props.boardMember)
       .map((member) => ({
@@ -104,7 +102,6 @@ const CardModal = (props) => {
         totalExperience: member.totalExperience,
         skills: member.skills,
       }));
-      console.log(" ++++ get recommendation handler middle", cardData)
     axios
       .post("http://127.0.0.1:8000/", {
         title: cardData.title,
@@ -135,9 +132,6 @@ const CardModal = (props) => {
         list: cardData.list,
       })
       .then((res) => {
-        console.log("the remove member response is ", res.data);
-        // setCardData(...res.data)
-        console.log("thre response is heerrr", res);
         props.getBoardData();
         console.log(res);
       })
@@ -147,7 +141,6 @@ const CardModal = (props) => {
   };
 
   function addMemberToCard(email) {
-    console.log(" ++++ addMember to card ", cardData)
     return axios
       .patch("/card/addUser", {
         cardId: cardData._id,
@@ -155,7 +148,6 @@ const CardModal = (props) => {
         list: cardData.list,
       })
       .then((res) => {
-        console.log("thre response is heerrr", res);
         props.getBoardData();
         setEmail("");
         setCardData({ ...cardData, assignedTo: res.data.newCard.assignedTo });
@@ -270,16 +262,6 @@ const CardModal = (props) => {
             Add
           </Button>
         </div>
-        {/* {cardData.assignedTo.map(
-          (assignee, i) => console.log("the assignees arerr", assignee),
-          // (
-            // <div key ={i} style={{display: "flex", paddingBottom: 20, width: 400}}>
-            //   <div>{assignee}</div>
-            //   <div style={{flexGrow: 2}}/>
-            //   <Button onClick = {() => removeAssigned(i)} style={{fontFamily: "Ubuntu"}}>Remove</Button>
-            // </div>
-          // )
-        )} */}
         {cardData.assignedTo.map((assignee, i) => {
           return (
             <div

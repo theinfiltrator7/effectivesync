@@ -38,7 +38,6 @@ const Home = () => {
   const [selectedMemberIndex, setSelectedMemberIndex] = useState(null);
   const [selectedAdminIndex, setSelectedAdminIndex] = useState(null);
 
-
   useEffect(() => {
     if (!selectedBoard) return;
     getBoardData();
@@ -80,8 +79,11 @@ const Home = () => {
           });
 
           lists.forEach((list) => {
-            list.cards = obj[list._id];
+            list.cards = obj[list._id]
+              ? obj[list._id].sort((a, b) => a.rank - b.rank)
+              : [];
           });
+
           setBoardLists(lists);
           setListUpdated(false);
           setNewListTitle("");
@@ -145,7 +147,6 @@ const Home = () => {
   };
 
   let onDragEnd = (result) => {
-    console.log("this is drag" , result)
     if (
       result.source.index === result.destination.index &&
       result.source.droppableId === result.destination.droppableId
@@ -163,7 +164,7 @@ const Home = () => {
     let sourceCard = sourceList.cards[result.source.index];
 
     sourceList.cards.splice(result.source.index, 1);
-    if(destinationList.cards) {
+    if (destinationList.cards) {
       destinationList.cards.splice(result.destination.index, 0, sourceCard);
     } else {
       destinationList.cards = [sourceCard];
@@ -212,7 +213,6 @@ const Home = () => {
   };
 
   let onCardModalSubmit = (data) => {
-    console.log("++++", data)
     if (data._id) {
       axios
         .patch(`/card`, { ...data })
@@ -232,7 +232,6 @@ const Home = () => {
           board: selectedBoard,
         })
         .then(function (response) {
-          // setAddingBoard(false);
           setIsModalOpen(false);
           getBoardData();
         })
@@ -361,25 +360,6 @@ const Home = () => {
 
   return (
     <div className="wrapper">
-      {/* {showSkillsModal && (
-        <ReactModal
-          isOpen={showSkillsModal}
-          style={{
-            overlay: { zIndex: 2 },
-            content: {
-              top: "15vh",
-              bottom: "15vh",
-              left: "20vw",
-              right: "20vw",
-              minWidth: 600,
-              borderRadius: 15,
-              backgroundColor: "#fff9df",
-            },
-          }}>
-          <div></div>
-        </ReactModal>
-      )} */}
-
       {isModalOpen && (
         <CardModal
           modalClose={closeModalHandler}
@@ -474,28 +454,42 @@ const Home = () => {
                             >
                               Remove Admin
                             </Button>
-                            {member.skills?
-                              <Button 
-                              style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
-                              onClick={() => setSelectedAdminIndex(i)}>
-                                Show Skills</Button>:null}
-                                {selectedAdminIndex === i?
-                                  <div>
-                                    <div style={{padding: 10}}>Skills</div>
-                                    {member.skills.map((skill) => {
-                                      return (
-                                        <div style={{display: "flex"}}>
-                                          <div style={{paddingLeft: 15, paddingBottom: 9}}>+</div>
-                                          <div style={{paddingLeft: 10}}>{skill}</div>
-                                        </div>
-                                      )
-                                    })}
-                                    <Button
-                                      style={{ fontFamily: "Ubuntu", margin: 10 }}
-                                      onClick={() => setSelectedAdminIndex(null)}
-                                    >Hide Skills</Button>
-                                  </div>
-                                  : null}
+                            {member.skills ? (
+                              <Button
+                                style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
+                                onClick={() => setSelectedAdminIndex(i)}
+                              >
+                                Show Skills
+                              </Button>
+                            ) : null}
+                            {selectedAdminIndex === i ? (
+                              <div>
+                                <div style={{ padding: 10 }}>Skills</div>
+                                {member.skills.map((skill) => {
+                                  return (
+                                    <div style={{ display: "flex" }}>
+                                      <div
+                                        style={{
+                                          paddingLeft: 15,
+                                          paddingBottom: 9,
+                                        }}
+                                      >
+                                        +
+                                      </div>
+                                      <div style={{ paddingLeft: 10 }}>
+                                        {skill}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                                <Button
+                                  style={{ fontFamily: "Ubuntu", margin: 10 }}
+                                  onClick={() => setSelectedAdminIndex(null)}
+                                >
+                                  Hide Skills
+                                </Button>
+                              </div>
+                            ) : null}
                             <div className="memberDetailItems">
                               Upload Resume to Parse and update skills and
                               experience
@@ -520,7 +514,6 @@ const Home = () => {
                     })}
                     <div style={{ paddingBottom: 10 }}>BOARD MEMBERS</div>
                     {boardMember.map((member, i) => {
-                      console.log("member", member)
                       return (
                         <div className="memberDetailsWrapper" key={member._id}>
                           <div className="memberDetails">
@@ -533,28 +526,42 @@ const Home = () => {
                             >
                               Remove Member
                             </Button>
-                            {member.skills?
-                              <Button 
-                              style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
-                              onClick={() => setSelectedMemberIndex(i)}>
-                                Show Skills</Button>:null}
-                                {selectedMemberIndex === i?
-                                  <div>
-                                    <div style={{padding: 10}}>Skills</div>
-                                    {member.skills.map((skill) => {
-                                      return (
-                                        <div style={{display: "flex"}}>
-                                          <div style={{paddingLeft: 15, paddingBottom: 9}}>+</div>
-                                          <div style={{paddingLeft: 10}}>{skill}</div>
-                                        </div>
-                                      )
-                                    })}
-                                    <Button
-                                      style={{ fontFamily: "Ubuntu", margin: 10 }}
-                                      onClick={() => setSelectedMemberIndex(null)}
-                                    >Hide Skills</Button>
-                                  </div>
-                                  : null}
+                            {member.skills ? (
+                              <Button
+                                style={{ fontFamily: "Ubuntu", marginLeft: 20 }}
+                                onClick={() => setSelectedMemberIndex(i)}
+                              >
+                                Show Skills
+                              </Button>
+                            ) : null}
+                            {selectedMemberIndex === i ? (
+                              <div>
+                                <div style={{ padding: 10 }}>Skills</div>
+                                {member.skills.map((skill) => {
+                                  return (
+                                    <div style={{ display: "flex" }}>
+                                      <div
+                                        style={{
+                                          paddingLeft: 15,
+                                          paddingBottom: 9,
+                                        }}
+                                      >
+                                        +
+                                      </div>
+                                      <div style={{ paddingLeft: 10 }}>
+                                        {skill}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                                <Button
+                                  style={{ fontFamily: "Ubuntu", margin: 10 }}
+                                  onClick={() => setSelectedMemberIndex(null)}
+                                >
+                                  Hide Skills
+                                </Button>
+                              </div>
+                            ) : null}
                             <div className="memberDetailItems">
                               Upload Resume to Parse and update skills and
                               experience
@@ -625,33 +632,9 @@ const Home = () => {
           ) : (
             <div className="addListHomeWrapper">
               <div className="addListHome">Select a board</div>
-              {/* <input
-                type="text"
-                onChange={(e) => onListNameChangeHandler(e)}
-                value={newListTitle}
-                style={{
-                  marginLeft: 32,
-                  paddingRight: 20,
-                  fontFamily: "Ubuntu",
-                  height: 25,
-                  width: 200,
-                }}
-              />
-              <Button
-                style={{
-                  margin: 10,
-                  backgroundColor: "#e0ffff",
-                  fontFamily: "Ubuntu",
-                }}
-                onClick={createList}
-              >
-                Add list
-              </Button> */}
             </div>
           )}
         </div>
-
-        {/* {checkList? } */}
       </div>
     </div>
   );
